@@ -6,5 +6,19 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+# flexible concrete Error type built on std::error::Error 
+#Convenient for defining Result<Ok, Error> type return value
 anyhow = "1.0"
+# for reading environment variables from a .env
 dotenv = "0.15.0"
+#implements ECDSA and BIP340 signatures for elliptic curves
+secp256k1 = { version = "0.20.3", features = ["rand"] }
+# for async applications
+tokio = { version = "1", features = ["full"] }
+#Ethereum JSON-RPC client
+web3 = "0.17.0"
+# serialization format
+serde = { version = "1.0", features = ["derive"] }
+# JSON serialization format
+serde_json = "1.0"
+tiny-keccak = { version = "1.4" }
