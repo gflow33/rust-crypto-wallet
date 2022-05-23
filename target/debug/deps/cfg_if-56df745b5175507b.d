@@ -1,0 +1,7 @@
+/home/kaioh/rust-crypto-wallet/target/debug/deps/cfg_if-56df745b5175507b.rmeta: /home/kaioh/.cargo/registry/src/github.com-1ecc6299db9ec823/cfg-if-1.0.0/src/lib.rs
+
+/home/kaioh/rust-crypto-wallet/target/debug/deps/libcfg_if-56df745b5175507b.rlib: /home/kaioh/.cargo/registry/src/github.com-1ecc6299db9ec823/cfg-if-1.0.0/src/lib.rs
+
+/home/kaioh/rust-crypto-wallet/target/debug/deps/cfg_if-56df745b5175507b.d: /home/kaioh/.cargo/registry/src/github.com-1ecc6299db9ec823/cfg-if-1.0.0/src/lib.rs
+
+/home/kaioh/.cargo/registry/src/github.com-1ecc6299db9ec823/cfg-if-1.0.0/src/lib.rs:
