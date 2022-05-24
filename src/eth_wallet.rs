@@ -51,8 +51,16 @@ impl Wallet {
         serde_json::to_writer_pretty(buf_writer, self)?;
 
         Ok(())
+    }
 
-}
+    pub  fn from_file(file_path: &str) -> Result<Wallet> {
+        let file = OpenOptions::new().read(true).open(file_path)?;
+        let buf_reader = BufReader::new(file);
+
+        let wallet: Wallet = 
+        serde_json::from_reader(buf_reader)?;
+        Ok(wallet)
+    }
 
 
 }
