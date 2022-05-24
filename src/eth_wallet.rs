@@ -9,7 +9,7 @@ use std::io::BufWriter;
 use std::str::FromStr;
 use std::{fs::OpenOptions, io::BufReader};
 use tiny_keccak::keccak256;
-use web3::{transports::WebSocket, types::{Address, U256}, Web3,};
+use web3::{transports::WebSocket, types::{Address, U256, TransactionParameters}, Web3, api::Web3Api, Transport,};
 
 pub fn generate_keypair() -> (SecretKey, PublicKey) {
     let secp = secp256k1::Secp256k1::new();
@@ -53,7 +53,7 @@ impl Wallet {
         Ok(())
     }
 
-    pub  fn from_file(file_path: &str) -> Result<Wallet> {
+    pub fn from_file(file_path: &str) -> Result<Wallet> {
         let file = OpenOptions::new().read(true).open(file_path)?;
         let buf_reader = BufReader::new(file);
 
@@ -83,10 +83,32 @@ impl Wallet {
         let transport = web3::transports::WebSocket::new(url).await?;
         Ok(web3::Web3::new(transport))
     } 
+
+    pub async fn get_balance_in_eth(&self, web3_connection: &Web3<WebSocket>) -> 
+    Result<f64> {
+        let wei_balance = self.get_balance(web3_connection).await?;
+        Ok(utils::wei_to_eth(wei_balance))
+    } 
 }
 
 
 pub(crate) async fn establish_web3_connection(url: &str) ->  Result<Web3<WebSocket>> {
     let transport = web3::transports::WebSocket::new(url).await?;
     Ok(web3::Web3::new(transport))
- }  
+}
+
+pub fn create_eth_transaction(to: Address, eth_value: f64) -> TransactionParameters {
+    TransactionParameters { 
+        to: Some(to), 
+        //gas: (), 
+        //gas_price: (), 
+        value: utils::eth_to_wei(eth_value), 
+        ..Default::default()
+        //data: (), 
+        //chain_id: (), 
+        //transaction_type: (), 
+        //access_list: () }
+    }
+}
+
+pub async fn sign_and_send(web3: &Web3<transports::WebSocket>)
