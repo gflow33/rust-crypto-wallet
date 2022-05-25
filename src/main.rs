@@ -2,6 +2,8 @@ use anyhow::Result;
 mod eth_wallet;
 mod utils;
 use std::env;
+use std::str::FromStr;
+use web3::types::Address;
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
@@ -33,6 +35,13 @@ async fn main() -> Result<(), anyhow::Error> {
     let balance = loaded_wallet.get_balance_in_eth(&web3_con).await?;
     println!("wallet balance: {} eth", &balance);
 
+    let transaction = 
+    eth_wallet::create_eth_transaction(Address::from_str("0xea5359857927912F79500b5080fD8685E31BBeD9")?,
+    0.01,);
+
+    let transact_hash = eth_wallet::sign_and_send(&web3_con, transaction, &loaded_wallet.get_secret_key()?).await?;
+
+    println!("transaction hash: {:?}", transact_hash);
 
     Ok(())
 }
