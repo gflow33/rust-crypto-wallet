@@ -9,7 +9,7 @@ use std::io::BufWriter;
 use std::str::FromStr;
 use std::{fs::OpenOptions, io::BufReader};
 use tiny_keccak::keccak256;
-use web3::{transports::WebSocket, types::{Address, U256, TransactionParameters}, Web3, api::Web3Api, Transport,};
+use web3::{transports::{WebSocket, self}, types::{Address, U256, TransactionParameters, H256}, Web3, api::Web3Api, Transport,};
 
 pub fn generate_keypair() -> (SecretKey, PublicKey) {
     let secp = secp256k1::Secp256k1::new();
@@ -111,4 +111,10 @@ pub fn create_eth_transaction(to: Address, eth_value: f64) -> TransactionParamet
     }
 }
 
-pub async fn sign_and_send(web3: &Web3<transports::WebSocket>)
+pub async fn sign_and_send( web3: &Web3<transports::WebSocket>,
+    transaction: TransactionParameters, secret_key: &SecretKey) -> Result<H256> {
+        let signed = web3.accounts().sign_transaction(transaction, secret_key).await?;
+
+        let transaction_results = web3.eth().send_raw_transaction(signed.raw_transaction).await?;
+        Ok(transaction_results)
+    }  
